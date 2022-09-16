@@ -11,13 +11,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE,
+      # so your job can access it
       - uses: actions/checkout@v2
-      - uses: yc-actions/yc-cr-login@v0.1-alpha
+      # Runs a single command using the runners shell
+      - name: Yandex Cloud CR "Login" Action for GitHub Actions
+        uses: yc-actions/yc-cr-login@v0.1-alpha
         with:
           yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
-        env:
-          CR_REGISTRY: crpu5r4ijfhs6279o54u
-          CR_REPO: simple
-          IMAGE_TAG: ${{ github.sha }}
-      - run: docker build -t cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG .
-      - run: docker push cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG
+      - name: Build
+          run: |
+          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG .
+          docker push cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG
+          env:
+            CR_REGISTRY: crpu5r4ijfhs6279o54u
+            CR_REPO: simple
+            IMAGE_TAG: ${{ github.sha }}
+
