@@ -55,4 +55,4 @@ jobs:
         run: ssh prod "docker login --username oauth --password $YANDEX_CLOUD_SECRET cr.yandex"
 
       - name: Run test-ci instance
-        run: ssh prod "docker run --name simple -p 3000:3000 cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG"
+        run: ssh prod "docker run -d --name simple -p 3000:3000 cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG"
