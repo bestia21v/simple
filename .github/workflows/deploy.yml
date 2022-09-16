@@ -46,7 +46,7 @@ jobs:
           END
 
       - name: Debug
-        run: cat ~/.ssh/prod.key
+        run: echo "$SSH_KEY"
 
 
       - name: Run test-ci instance
