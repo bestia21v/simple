@@ -14,15 +14,13 @@ jobs:
       - uses: actions/checkout@v2
       # Runs a single command using the runners shell
       - name: Yandex Cloud CR "Login" Action for GitHub Actions
-      uses: yc-actions/yc-cr-login@v0.1-alpha
-      with:
-        yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
-
-      - name: Build
+      - uses: yc-actions/yc-cr-login@v0.1-alpha
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
           env:
             CR_REGISTRY: crpu5r4ijfhs6279o54u
             CR_REPO: simple
             IMAGE_TAG: ${{ github.sha }}
           run: |
-          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG .
-          docker push cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG
+            docker build -t cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG .
+            docker push cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG
