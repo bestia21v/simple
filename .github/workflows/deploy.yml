@@ -45,5 +45,6 @@ jobs:
             StrictHostKeyChecking no
           END
 
+
       - name: Run test-ci instance
-        run: docker run --name simple -p 3000:3000 cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG
+        run: ssh prod 'docker run --name simple -p 3000:3000 cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG'
