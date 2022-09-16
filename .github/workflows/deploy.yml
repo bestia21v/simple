@@ -16,6 +16,8 @@ jobs:
       SSH_USER: ${{ secrets.PROD_SSH_USER }}
       SSH_KEY: ${{ secrets.PROD_SSH_KEY }}
       SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
+      YANDEX_CLOUD_SECRET: ${{ secrets.YANDEX_CLOUD_SECRET }}
+
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE,
@@ -48,6 +50,9 @@ jobs:
       - name: Debug
         run: echo "$SSH_KEY"
 
+
+      - name: Login docker
+        run: ssh prod "docker login --username oauth --password $YANDEX_CLOUD_SECRET cr.yandex"
 
       - name: Run test-ci instance
         run: ssh prod "docker run --name simple -p 3000:3000 cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG"
