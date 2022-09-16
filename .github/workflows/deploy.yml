@@ -27,10 +27,10 @@ jobs:
         with:
           yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
 
-      - name: Build, tag, and push image to Yandex Cloud Container Registry
-        run: | 
-          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG .
-          docker push cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG
+#      - name: Build, tag, and push image to Yandex Cloud Container Registry
+#        run: |
+#          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG .
+#          docker push cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG
 
       - name: Configure SSH
         run: |
@@ -44,6 +44,9 @@ jobs:
             IdentityFile ~/.ssh/prod.key
             StrictHostKeyChecking no
           END
+
+      - name: Debug
+        run: cat ~/.ssh/prod.key
 
 
       - name: Run test-ci instance
