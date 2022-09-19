@@ -7,13 +7,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  env:
-    IMAGE_TAG: ${{ github.sha }}
   build:
     runs-on: ubuntu-latest
     env:
       CR_REGISTRY: crpu5r4ijfhs6279o54u
       CR_REPO: simple
+      IMAGE_TAG: ${{ github.sha }}
 
     steps:
       #- uses: actions/checkout@v2
@@ -35,6 +34,7 @@ jobs:
       SSH_KEY: ${{ secrets.PROD_SSH_KEY }}
       SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
       YANDEX_CLOUD_SECRET: ${{ secrets.YANDEX_CLOUD_SECRET }}
+      IMAGE_TAG: ${{ github.sha }}
 
     steps:
       - name: Configure SSH
