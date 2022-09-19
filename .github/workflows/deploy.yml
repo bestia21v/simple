@@ -60,4 +60,4 @@ jobs:
 #        run: ssh prod "docker stop simple && docker rm simple"
 
       - name: Run test-ci instance
-        run: ssh prod "docker run --rm -d --name simple -p 3000:3000 cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG"
+        run: ssh prod "docker run --rm=false -d --name simple -p 3000:3000 cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG"
