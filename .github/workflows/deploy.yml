@@ -57,7 +57,7 @@ jobs:
         run: ssh prod "docker login --username oauth --password $YANDEX_CLOUD_SECRET cr.yandex"
 
       - name: Delete container
-        run: ssh prod "docker rm -f $(docker ps -a --filter name=simple)"
+        run: ssh prod 'docker rm -f $(docker ps -a --filter name=simple  --format "{{.ID}}")'
 
       - name: Run test-ci instance
         run: ssh prod "docker run --rm=false -d --name simple -p 3000:3000 cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG"
