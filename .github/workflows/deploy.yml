@@ -15,7 +15,7 @@ jobs:
       IMAGE_TAG: ${{ github.sha }}
 
     steps:
-      #- uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: Yandex Cloud CR "Login" Action for GitHub Actions
         uses: yc-actions/yc-cr-login@v0.1-alpha
         with:
@@ -27,6 +27,7 @@ jobs:
           docker push cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG
 
   deploy:
+    needs: build
     runs-on: ubuntu-latest
 
     env:
