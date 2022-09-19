@@ -56,8 +56,8 @@ jobs:
       - name: Login docker
         run: ssh prod "docker login --username oauth --password $YANDEX_CLOUD_SECRET cr.yandex"
 
-      - name: Stop docker container
-        run: ssh prod "docker stop simple && docker rm simple"
+#      - name: Stop docker container
+#        run: ssh prod "docker stop simple && docker rm simple"
 
       - name: Run test-ci instance
-        run: ssh prod "docker run -d --name simple -p 3000:3000 cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG"
+        run: ssh prod "docker run --rm -d --name simple -p 3000:3000 cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG"
