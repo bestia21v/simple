@@ -36,6 +36,8 @@ jobs:
       SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
       YANDEX_CLOUD_SECRET: ${{ secrets.YANDEX_CLOUD_SECRET }}
       IMAGE_TAG: ${{ github.sha }}
+      CR_REGISTRY: crpu5r4ijfhs6279o54u
+      CR_REPO: simple
 
     steps:
       - name: Configure SSH
