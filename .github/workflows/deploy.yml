@@ -7,23 +7,16 @@ on:
   workflow_dispatch:
 
 jobs:
+  env:
+    IMAGE_TAG: ${{ github.sha }}
   build:
     runs-on: ubuntu-latest
     env:
       CR_REGISTRY: crpu5r4ijfhs6279o54u
       CR_REPO: simple
-      IMAGE_TAG: ${{ github.sha }}
-      SSH_USER: ${{ secrets.PROD_SSH_USER }}
-      SSH_KEY: ${{ secrets.PROD_SSH_KEY }}
-      SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
-      YANDEX_CLOUD_SECRET: ${{ secrets.YANDEX_CLOUD_SECRET }}
-
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE,
-      # so your job can access it
-      - uses: actions/checkout@v2
-      # Runs a single command using the runners shell
+      #- uses: actions/checkout@v2
       - name: Yandex Cloud CR "Login" Action for GitHub Actions
         uses: yc-actions/yc-cr-login@v0.1-alpha
         with:
@@ -34,6 +27,16 @@ jobs:
           docker build -t cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG .
           docker push cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG
 
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      SSH_USER: ${{ secrets.PROD_SSH_USER }}
+      SSH_KEY: ${{ secrets.PROD_SSH_KEY }}
+      SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
+      YANDEX_CLOUD_SECRET: ${{ secrets.YANDEX_CLOUD_SECRET }}
+
+    steps:
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh/
@@ -41,20 +44,16 @@ jobs:
           chmod 600 ~/.ssh/prod.key
           cat >>~/.ssh/config <<END
           Host prod
-            HostName $SSH_HOST
-            User $SSH_USER
-            IdentityFile ~/.ssh/prod.key
-            StrictHostKeyChecking no
+           HostName $SSH_HOST
+           User $SSH_USER
+           IdentityFile ~/.ssh/prod.key
+           StrictHostKeyChecking no
           END
-
-      - name: Debug
-        run: echo "$SSH_KEY"
-
 
       - name: Login docker
         run: ssh prod "docker login --username oauth --password $YANDEX_CLOUD_SECRET cr.yandex"
 
-      - name:  Stop docker container
+      - name: Stop docker container
         run: ssh prod "docker stop simple && docker rm simple"
 
       - name: Run test-ci instance
