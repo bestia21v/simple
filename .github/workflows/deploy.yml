@@ -29,4 +29,4 @@ jobs:
           END
 
       - name: Start script
-        run: ssh prod "run scripts/script.sh"
+        run: ssh prod "./scripts/script.sh"
