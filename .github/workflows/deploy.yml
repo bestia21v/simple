@@ -10,34 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      CR_REGISTRY: crpu5r4ijfhs6279o54u
-      CR_REPO: simple
-      IMAGE_TAG: ${{ github.sha }}
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Yandex Cloud CR "Login" Action for GitHub Actions
-        uses: yc-actions/yc-cr-login@v0.1-alpha
-        with:
-          yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
-
-      - name: Build, tag, and push image to Yandex Cloud Container Registry
-        run: |
-          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG .
-          docker push cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    env:
       SSH_USER: ${{ secrets.PROD_SSH_USER }}
       SSH_KEY: ${{ secrets.PROD_SSH_KEY }}
       SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
-      YANDEX_CLOUD_SECRET: ${{ secrets.YANDEX_CLOUD_SECRET }}
-      IMAGE_TAG: ${{ github.sha }}
-      CR_REGISTRY: crpu5r4ijfhs6279o54u
-      CR_REPO: simple
 
     steps:
       - name: Configure SSH
@@ -53,11 +28,5 @@ jobs:
            StrictHostKeyChecking no
           END
 
-      - name: Login docker
-        run: ssh prod "docker login --username oauth --password $YANDEX_CLOUD_SECRET cr.yandex"
-
-      - name: Delete container
-        run: ssh prod 'docker rm -f $(docker ps -a --filter name=simple --format "{{.ID}}")'
-
-      - name: Run test-ci instance
-        run: ssh prod "docker run --rm=false -d --name simple -p 3000:3000 cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG"
+      - name: Check folder
+        run: ssh prod "ls -la"
