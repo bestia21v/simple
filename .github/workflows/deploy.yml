@@ -28,5 +28,5 @@ jobs:
            StrictHostKeyChecking no
           END
 
-      - name: Check folder
-        run: ssh prod "ls -la"
+      - name: Start script
+        run: ssh prod "run scripts/script.sh"
